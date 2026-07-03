@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>writing — omar kutbi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <a href="index.html">about</a>
+        <a href="writing.html" class="current">writing</a>
+        <a href="photography.html">photography</a>
+      </nav>
+    </header>
+
+    <p class="note">pulled automatically from <a href="https://omarkutbi.substack.com">omarkutbi.substack.com</a>.</p>
+
+    <div id="writing-feed">
+      <p class="note">loading posts&hellip;</p>
+    </div>
+
+    <script>
+      const SUBSTACK_FEED = 'https://omarkutbi.substack.com/feed';
+      const API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(SUBSTACK_FEED);
+
+      function escapeHtml(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+
+      async function loadPosts() {
+        const container = document.getElementById('writing-feed');
+        try {
+          const res = await fetch(API_URL);
+          const data = await res.json();
+
+          if (data.status !== 'ok' || !data.items || !data.items.length) {
+            throw new Error('empty feed');
+          }
+
+          const items = data.items.map(function (item) {
+            const date = new Date(item.pubDate);
+            const label = date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+            return '<li><a href="' + item.link + '" target="_blank" rel="noopener">' +
+              escapeHtml(item.title) + '</a><span class="date">' + label + '</span></li>';
+          }).join('');
+
+          container.innerHTML = '<ul class="writing-list">' + items + '</ul>';
+        } catch (err) {
+          container.innerHTML = '<p class="note">couldn\'t load posts automatically &mdash; ' +
+            '<a href="https://omarkutbi.substack.com">read them on substack</a>.</p>';
+        }
+      }
+
+      loadPosts();
+    </script>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>[album name] — omar kutbi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <a href="index.html">about</a>
+        <a href="writing.html">writing</a>
+        <a href="photography.html" class="current">photography</a>
+      </nav>
+    </header>
+
+    <p><a href="photography.html">&larr; all albums</a></p>
+
+    <h2>[album name]</h2>
+    <p class="note">month year</p>
+
+    <!--
+      Duplicate this file per album (e.g. ski-touring.html, riyadh.html) and
+      point the link in photography.html at it.
+
+      Each img src below should be a Cloudinary "secure URL" — copy it
+      straight from your Cloudinary media library after uploading. Example:
+      https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/f_auto,q_auto,w_800/album-name/photo1.jpg
+
+      f_auto,q_auto,w_800 in the URL tells Cloudinary to auto-format,
+      auto-compress, and cap width at 800px — keeps pages fast for free.
+    -->
+    <div class="photo-grid">
+      <div class="photo-box"><img src="[cloudinary-url-1]" alt="[caption]"></div>
+      <div class="photo-box"><img src="[cloudinary-url-2]" alt="[caption]"></div>
+      <div class="photo-box"><img src="[cloudinary-url-3]" alt="[caption]"></div>
+      <div class="photo-box"><img src="[cloudinary-url-4]" alt="[caption]"></div>
+    </div>
+
+  </div>
+</body>
+</html>

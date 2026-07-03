@@ -1,0 +1,193 @@
+/* ---------------------------------------------------
+   Shared stylesheet — simple, old-web look
+   off-white background, blue links, serif type
+--------------------------------------------------- */
+
+body {
+  background-color: #f7f3e9;
+  color: #1a1a1a;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 17px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0;
+}
+
+.wrapper {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 40px 24px 80px 24px;
+}
+
+/* ---- links, early-web blue ---- */
+a:link {
+  color: #0000ee;
+  text-decoration: underline;
+}
+
+a:visited {
+  color: #551a8b;
+}
+
+a:hover {
+  color: #b00000;
+}
+
+/* ---- header / nav ---- */
+header {
+  margin-bottom: 36px;
+}
+
+header h1 {
+  font-size: 20px;
+  margin: 0 0 14px 0;
+  font-weight: normal;
+}
+
+header p.tagline {
+  margin: 0 0 16px 0;
+  font-style: italic;
+  color: #444;
+  font-size: 15px;
+}
+
+nav {
+  font-size: 15px;
+}
+
+nav a {
+  margin-right: 16px;
+  text-decoration: none;
+  color: #0000ee;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+nav a.current {
+  color: #1a1a1a;
+  text-decoration: underline;
+}
+
+/* ---- intro heading, used on the about page ---- */
+.intro {
+  font-size: 26px;
+  font-weight: normal;
+  margin: 0 0 22px 0;
+}
+
+/* ---- headings ---- */
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 40px;
+  margin-bottom: 4px;
+}
+
+h3 {
+  font-size: 17px;
+  margin-bottom: 2px;
+}
+
+h3 .role {
+  font-weight: normal;
+  font-style: italic;
+}
+
+.dates {
+  float: right;
+  font-style: italic;
+  color: #555;
+  font-size: 15px;
+}
+
+.bucket {
+  font-weight: bold;
+  font-style: italic;
+  margin-top: 16px;
+  margin-bottom: 4px;
+  font-size: 15px;
+}
+
+ul {
+  margin-top: 6px;
+  padding-left: 22px;
+}
+
+li {
+  margin-bottom: 6px;
+}
+
+.entry {
+  margin-bottom: 26px;
+  overflow: auto;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #c9c2ad;
+  margin: 30px 0;
+}
+
+/* ---- writing list ---- */
+.writing-list {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 8px;
+}
+
+.writing-list li {
+  margin-bottom: 8px;
+}
+
+.writing-list .date {
+  color: #666;
+  font-style: italic;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+/* ---- placeholder grid (photography) ---- */
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.photo-box {
+  border: 1px dashed #b0a890;
+  background-color: #fbf9f2;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #888;
+  font-size: 14px;
+  font-style: italic;
+  text-align: center;
+  padding: 10px;
+  overflow: hidden;
+}
+
+.photo-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+footer {
+  margin-top: 60px;
+  padding-top: 16px;
+  border-top: 1px solid #c9c2ad;
+  font-size: 13px;
+  color: #666;
+}
+
+.note {
+  font-size: 14px;
+  color: #666;
+  font-style: italic;
+}
