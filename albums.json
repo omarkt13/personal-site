@@ -2,10 +2,11 @@
   "albums": [
     {
       "slug": "japan-2016",
-      "title": "japan",
+      "title": "japan, 2016",
       "date_label": "january 2016",
-      "date_sort": "0000-00-00",
-      "folder": null
+      "date_sort": "2016-01-01",
+      "location": null,
+      "folder": "Japan - 2016"
     }
   ]
 }

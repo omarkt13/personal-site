@@ -148,18 +148,28 @@ hr {
   margin-left: 10px;
 }
 
-/* ---- placeholder grid (photography) ---- */
+/* ---- photo grid: justified rows, sized by each photo's real aspect
+   ratio (flex-grow/flex-basis set inline per photo — see sync_albums.py).
+   No forced square crop; flexbox packs each row to fill the width and
+   object-fit only trims the rounding, not the composition. ---- */
 .photo-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 20px;
 }
 
 .photo-box {
+  height: 200px;
+  overflow: hidden;
+  background-color: #ece7d8;
+}
+
+/* placeholder-only styling, for boxes with no image yet (album-template.html) */
+.photo-box:empty,
+.photo-box:has(img[src^="["]) {
   border: 1px dashed #b0a890;
   background-color: #fbf9f2;
-  aspect-ratio: 4 / 3;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,7 +178,6 @@ hr {
   font-style: italic;
   text-align: center;
   padding: 10px;
-  overflow: hidden;
 }
 
 .photo-box img {

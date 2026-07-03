@@ -242,6 +242,9 @@ def slugify(name):
 # Page generation
 # ---------------------------------------------------------------------------
 
+ROW_HEIGHT = 200  # must match .photo-box height in style.css
+
+
 def album_image_tags(resources):
     def sort_key(r):
         m = re.search(r"-(\d+)_", r["public_id"])
@@ -250,12 +253,21 @@ def album_image_tags(resources):
     ordered = sorted(resources, key=sort_key)
     tags = []
     for i, r in enumerate(ordered, 1):
+        # Lightest-weight delivery: auto format (WebP/AVIF where supported),
+        # eco compression, capped width and dpr — boxes only render at
+        # ROW_HEIGHT tall, so anything wider is wasted bytes. loading="lazy"
+        # defers off-screen photos too.
         url = (
             f"https://res.cloudinary.com/{CLOUDINARY_CLOUD_NAME}/image/upload/"
-            f"f_auto,q_auto,w_800/{r['public_id']}.{r['format']}"
+            f"f_auto,q_auto:eco,w_600,dpr_auto,c_scale/{r['public_id']}.{r['format']}"
         )
+        width = r.get("width") or 4
+        height = r.get("height") or 3
+        ratio = width / height if height else 4 / 3
+        basis = round(ROW_HEIGHT * ratio)
         tags.append(
-            f'      <div class="photo-box"><img src="{url}" alt="photo {i}"></div>'
+            f'      <div class="photo-box" style="flex-grow: {ratio:.3f}; flex-basis: {basis}px;">'
+            f'<img src="{url}" alt="photo {i}" loading="lazy"></div>'
         )
     return "\n".join(tags)
 
@@ -337,10 +349,6 @@ def build_photography_page(albums_sorted):
             f'      <li><a href="{a["slug"]}.html">{a["title"]}</a>'
             f'<span class="date">{a["date_label"]}</span></li>'
         )
-    rows.append(
-        '      <li><a href="album-template.html">[album name]</a>'
-        '<span class="date">month year</span></li>'
-    )
     return PHOTOGRAPHY_TEMPLATE.format(album_rows="\n".join(rows))
 
 
@@ -375,40 +383,58 @@ def main():
             del state_by_slug[slug]
             changed = True
 
-    # --- additions: Cloudinary folders not yet on the site ---
+    # --- additions + refresh: every Cloudinary folder gets its page rebuilt ---
+    # (not just new ones) so template/CSS changes here always propagate to
+    # existing albums too, without needing a one-off manual regeneration.
     for slug, folder in current_slugs.items():
-        if slug in state_by_slug:
-            summary.append((folder, slug, "already listed — skipped"))
-            continue
-
-        print(f"New folder detected: '{folder}' -> generating '{slug}.html'")
+        is_new = slug not in state_by_slug
         resources = list_folder_resources(folder)
         if not resources:
             summary.append((folder, slug, "no images found — skipped"))
             continue
 
-        date_label, date_sort, location, source = derive_date_and_location(
-            folder, resources
-        )
-        title = re.sub(r"\s*-?\s*(19|20)\d{2}\s*$", "", folder).strip().lower() or slug
+        if is_new:
+            print(f"New folder detected: '{folder}' -> generating '{slug}.html'")
+            date_label, date_sort, location, source = derive_date_and_location(
+                folder, resources
+            )
+            title = re.sub(r"\s*-?\s*(19|20)\d{2}\s*$", "", folder).strip().lower() or slug
+        else:
+            existing = state_by_slug[slug]
+            date_label = existing["date_label"]
+            date_sort = existing["date_sort"]
+            location = existing.get("location")
+            title = existing["title"]
+            source = "existing"
 
         page = build_album_page(title, date_label, location, resources)
-        with open(os.path.join(OUTPUT_DIR, f"{slug}.html"), "w") as f:
-            f.write(page)
+        album_path = os.path.join(OUTPUT_DIR, f"{slug}.html")
+        old_page = None
+        if os.path.exists(album_path):
+            with open(album_path) as f:
+                old_page = f.read()
+        if page != old_page:
+            with open(album_path, "w") as f:
+                f.write(page)
+            changed = True
 
         state_by_slug[slug] = {
             "slug": slug,
             "title": title,
             "date_label": date_label,
             "date_sort": date_sort,
+            "location": location,
             "folder": folder,
         }
-        summary.append((
-            folder, slug,
-            f"created — {len(resources)} photos, date via {source}"
-            + (f", location: {location}" if location else "")
-        ))
-        changed = True
+        if is_new:
+            summary.append((
+                folder, slug,
+                f"created — {len(resources)} photos, date via {source}"
+                + (f", location: {location}" if location else "")
+            ))
+            changed = True
+        else:
+            summary.append((folder, slug, "refreshed" if page != old_page else "unchanged"))
 
     # --- rebuild photography.html + state from what's left ---
     albums_sorted = sorted(
