@@ -24,18 +24,26 @@
       Duplicate this file per album (e.g. ski-touring.html, riyadh.html) and
       point the link in photography.html at it.
 
-      Each img src below should be a Cloudinary "secure URL" — copy it
-      straight from your Cloudinary media library after uploading. Example:
-      https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/f_auto,q_auto,w_800/album-name/photo1.jpg
+      Images are served through img.omarkutbi.com (a Cloudflare Worker that
+      proxies Cloudinary and only responds to requests coming from this
+      site — see cloudinary-gate-worker.js). Each img src below should be:
 
-      f_auto,q_auto,w_800 in the URL tells Cloudinary to auto-format,
-      auto-compress, and cap width at 800px — keeps pages fast for free.
+        https://img.omarkutbi.com/<folder>/<file>.jpg
+
+      where <folder>/<file>.jpg matches the path of the photo in your
+      Cloudinary media library (folder = album name you used when
+      uploading). Do NOT link directly to res.cloudinary.com/... — that
+      bypasses the access gate.
+
+      Note: because the Worker checks the page's Referer, these images
+      won't load if you open this file locally from your computer
+      (file://) — only when served from omarkutbi.com. That's expected.
     -->
     <div class="photo-grid">
-      <div class="photo-box"><img src="[cloudinary-url-1]" alt="[caption]"></div>
-      <div class="photo-box"><img src="[cloudinary-url-2]" alt="[caption]"></div>
-      <div class="photo-box"><img src="[cloudinary-url-3]" alt="[caption]"></div>
-      <div class="photo-box"><img src="[cloudinary-url-4]" alt="[caption]"></div>
+      <div class="photo-box"><img src="https://img.omarkutbi.com/[folder]/[photo1].jpg" alt="[caption]"></div>
+      <div class="photo-box"><img src="https://img.omarkutbi.com/[folder]/[photo2].jpg" alt="[caption]"></div>
+      <div class="photo-box"><img src="https://img.omarkutbi.com/[folder]/[photo3].jpg" alt="[caption]"></div>
+      <div class="photo-box"><img src="https://img.omarkutbi.com/[folder]/[photo4].jpg" alt="[caption]"></div>
     </div>
 
   </div>
