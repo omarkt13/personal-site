@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>consulting — omar kutbi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <nav>
+        <a href="index.html">about</a>
+        <a href="writing.html">writing</a>
+        <a href="photography.html">photography</a>
+        <a href="consulting.html" class="current">consulting</a>
+      </nav>
+    </header>
+
+    <h1 class="intro">consulting</h1>
+
+    <p>i offer, on occasion, freelance consulting services. if that's of interest, get in touch using the form below and i'll get back to you.</p>
+
+    <form id="contact-form" class="contact-form">
+      <label for="name">name</label>
+      <input type="text" id="name" name="name" required>
+
+      <label for="email">email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="message">message</label>
+      <textarea id="message" name="message" rows="6" required></textarea>
+
+      <button type="submit">send</button>
+    </form>
+    <p class="note" id="form-fallback">
+      or write directly: <a href="mailto:hello@omarkutbi.com">hello@omarkutbi.com</a>
+    </p>
+
+  </div>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var name = document.getElementById('name').value;
+      var email = document.getElementById('email').value;
+      var message = document.getElementById('message').value;
+      var subject = 'consulting inquiry from ' + name;
+      var body = message + '\n\n— ' + name + ' (' + email + ')';
+      var mailto = 'mailto:hello@omarkutbi.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>
