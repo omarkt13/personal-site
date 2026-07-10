@@ -22,9 +22,6 @@
     </div>
 
     <script>
-      const SUBSTACK_FEED = 'https://omarkutbi.substack.com/feed';
-      const API_URL = 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(SUBSTACK_FEED);
-
       function escapeHtml(str) {
         const div = document.createElement('div');
         div.textContent = str;
@@ -34,18 +31,16 @@
       async function loadPosts() {
         const container = document.getElementById('writing-feed');
         try {
-          const res = await fetch(API_URL);
+          const res = await fetch('writing.json', { cache: 'no-store' });
           const data = await res.json();
 
-          if (data.status !== 'ok' || !data.items || !data.items.length) {
+          if (!data.posts || !data.posts.length) {
             throw new Error('empty feed');
           }
 
-          const items = data.items.map(function (item) {
-            const date = new Date(item.pubDate);
-            const label = date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-            return '<li><a href="' + item.link + '" target="_blank" rel="noopener">' +
-              escapeHtml(item.title) + '</a><span class="date">' + label + '</span></li>';
+          const items = data.posts.map(function (post) {
+            return '<li><a href="' + post.link + '" target="_blank" rel="noopener">' +
+              escapeHtml(post.title) + '</a><span class="date">' + post.date_label + '</span></li>';
           }).join('');
 
           container.innerHTML = '<ul class="writing-list">' + items + '</ul>';
