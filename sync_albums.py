@@ -286,7 +286,6 @@ ALBUM_TEMPLATE = """<!DOCTYPE html>
         <a href="index.html">about</a>
         <a href="writing.html">writing</a>
         <a href="photography.html" class="current">photography</a>
-        <a href="consulting.html">consulting</a>
       </nav>
     </header>
 
@@ -318,7 +317,6 @@ PHOTOGRAPHY_TEMPLATE = """<!DOCTYPE html>
         <a href="index.html">about</a>
         <a href="writing.html">writing</a>
         <a href="photography.html" class="current">photography</a>
-        <a href="consulting.html">consulting</a>
       </nav>
     </header>
 
