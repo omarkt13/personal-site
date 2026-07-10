@@ -1,0 +1,41 @@
+name: Sync writing from Substack
+
+# Runs every 30 minutes, plus manually from the Actions tab. Fetches the
+# Substack RSS feed directly and writes a static writing.json that
+# writing.html reads (same-origin, no third-party caching involved).
+on:
+  schedule:
+    - cron: '*/30 * * * *'
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-writing
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run writing sync
+        run: python3 sync_writing.py
+
+      - name: Commit and push changes if anything changed
+        run: |
+          git config user.name "writing-sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Auto-sync writing from Substack"
+            git push
+          fi
